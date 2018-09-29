@@ -1,5 +1,5 @@
 defmodule Hangman do
-  @moduledoc """
+   @moduledoc """
   Documentation for Hangman.
   """
 
@@ -8,11 +8,15 @@ defmodule Hangman do
 
   ## Examples
 
-      iex> Hangman.hello()
-      :world
+    #   iex> Hangman.hello()
+    #   :world
 
   """
-  def hello do
-    :world
-  end
+
+  defdelegate new_game(), to: Hangman.Game
+
+  defdelegate make_move(game, guess), to: Hangman.Game
+
+  defdelegate tally(game), to: Hangman.Tally
+
 end
