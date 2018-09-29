@@ -5,6 +5,12 @@ defmodule Hangman.Game do
       |> Map.put(:letters, get_word())
   end
 
+  defp get_word() do
+    Dictionary.random_word 
+      |> String.codepoints()
+      |> Enum.map(&( "_#{&1}" ))
+  end
+
   def tally(game) do
     %{
       game_state: game.game_state,
@@ -15,19 +21,30 @@ defmodule Hangman.Game do
     }
   end
 
-  def make_move(game, guess) do
-
-  end
-
-  defp get_word do
-    Dictionary.random_word 
-      |> String.codepoints()
-      |> Enum.map(&( "_#{&1}" ))
-  end
-
   defp format_letters(list) do
     list 
       |> Enum.map(&( String.replace(&1, ~r/_./, "_") ))
   end
 
+  def make_move(game, guess) do
+    guess_used? = game |> Enum.member?(guess)
+
+    game 
+      |> Map.put(:last_guess, guess)
+      |> check_used(guess_used?)
+
+  end
+
+  defp check_used(game, true) do
+    game
+      |> Map.put(:game_state, :already_used)
+  end
+
+  defp check_used(game, false) do
+    game
+  end
+
+  # defp check_guess(%{game_state: :initializing} = game, guess) do
+    
+  # end
 end
