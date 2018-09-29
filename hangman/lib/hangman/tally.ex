@@ -1,19 +1,11 @@
 defmodule Hangman.Tally do
 
-  defmodule State do
-
-    defstruct(
-      game_state: :initializing, # :won | :lost | :already_used | :good_guess | :bad_guess | :initializing
-      turns_left: 7,             # the number of turns left (game starts with 7)
-      letters:    [],            # the sate of the word the user is trying to guess
-      used:       [],            # A sorted list of the letters already guessed
-      last_guess: nil            # the last letter guessed by the player  
-    )
-    
-  end
+  defstruct(
+    game_state: :initializing, # :won | :lost | :already_used | :good_guess | :bad_guess | :initializing
+    turns_left: 7,             # the number of turns left (game starts with 7)
+    letters:    [],            # the sate of the word the user is trying to guess
+    used:       [],            # A sorted list of the letters already guessed
+    last_guess: nil            # the last letter guessed by the player  
+  )
   
-  def tally(game) do
-    %State{}
-  end
-
 end
