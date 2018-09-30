@@ -86,6 +86,7 @@ defmodule Hangman.Game do
   defp check_won_or_lost(%{turns_left: 0} = game) do
     game
       |> Map.put(:game_state, :lost)
+      |> Map.put(:letters, game.letters |> reveal_all_letters())
   end
 
   defp check_won_or_lost(game) do
@@ -95,6 +96,10 @@ defmodule Hangman.Game do
       game
         |> Map.put(:game_state, :won)
     end
+  end
+
+  defp reveal_all_letters(letters) do
+    letters |> Enum.map(fn x -> String.replace(x, ~r/_(.)/, "\\1") end)
   end
 
 end
