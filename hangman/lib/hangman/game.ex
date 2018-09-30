@@ -27,12 +27,13 @@ defmodule Hangman.Game do
   end
 
   def make_move(game, guess) do
-    guess_used? = game |> Enum.member?(guess)
+    guess_used? = game.used |> Enum.member?(guess)
     
     game 
       |> Map.put(:last_guess, guess)
       |> check_used(guess_used?)
       |> check_turns()
+      |> check_guess()
 
   end
 
@@ -54,12 +55,28 @@ defmodule Hangman.Game do
       |> Map.put(:turns_left, game.turns_left - 1)
   end
 
-  # defp check_guess(%{game_state: :already_used} = game) do
-  #   game
-  # end
+  defp check_guess(%{game_state: :already_used} = game) do
+    game
+  end
 
-  # defp check_guess(game) do
-    
-  # end
+  defp check_guess(game) do
+    new_letters = game.letters |> Enum.map(fn x -> 
+      String.replace(x, ~r/_(#{game.last_guess})/, "\\1")
+    end)
+
+    game |>
+      check_guess(game.letters, new_letters)
+  end
+
+  defp check_guess(game, letters, letters) do
+    game
+      |> Map.put(:game_state, :bad_guess)
+  end
+
+  defp check_guess(game, _letters, new_letters) do
+    game
+      |> Map.put(:game_state, :good_guess)
+      |> Map.put(:letters, new_letters)
+  end
 
 end
