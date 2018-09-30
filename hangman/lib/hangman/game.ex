@@ -11,7 +11,7 @@ defmodule Hangman.Game do
       |> Enum.map(&( "_#{&1}" ))
   end
 
-  def tally(game) do
+  def tally(%Hangman.Tally{} = game) do
     %{
       game_state: game.game_state,
       turns_left: game.turns_left,                
@@ -21,12 +21,16 @@ defmodule Hangman.Game do
     }
   end
 
+  def tally(_) do
+    raise ArgumentError, message: "Invalid argument provided to function"
+  end
+
   defp format_letters(list) do
     list 
       |> Enum.map(&( String.replace(&1, ~r/_./, "_") ))
   end
 
-  def make_move(game, guess) do
+  def make_move(%Hangman.Tally{} = game, guess) do
     guess_used? = game.used |> Enum.member?(guess)
     
     new_state = game 
@@ -37,6 +41,10 @@ defmodule Hangman.Game do
       |> check_won_or_lost()
 
     { new_state, tally(new_state) }
+  end
+
+  def make_move(_, _) do
+    raise ArgumentError, message: "Invalid argument provided to function"
   end
 
   defp check_used(game, true) do
