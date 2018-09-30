@@ -32,8 +32,8 @@ defmodule Hangman.Game do
     game 
       |> Map.put(:last_guess, guess)
       |> check_used(guess_used?)
-      |> check_turns()
       |> check_guess()
+      |> check_turns()
 
   end
 
@@ -44,15 +44,8 @@ defmodule Hangman.Game do
 
   defp check_used(game, false) do
     game
-  end
-
-  defp check_turns(%{game_state: :already_used} = game) do
-    game
-  end
-
-  defp check_turns(game) do
-    game
-      |> Map.put(:turns_left, game.turns_left - 1)
+      |> Map.put(:game_state, :initializing)
+      |> Map.put(:used, game.used ++ [game.last_guess] |> Enum.sort())
   end
 
   defp check_guess(%{game_state: :already_used} = game) do
@@ -77,6 +70,15 @@ defmodule Hangman.Game do
     game
       |> Map.put(:game_state, :good_guess)
       |> Map.put(:letters, new_letters)
+  end
+
+  defp check_turns(%{game_state: :bad_guess} = game) do
+    game
+      |> Map.put(:turns_left, game.turns_left - 1)
+  end
+
+  defp check_turns(game) do
+    game
   end
 
 end
